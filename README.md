@@ -8,8 +8,6 @@ It doesn't require root privliges on the system, but do require adb & USB debugg
 
 # Contact Us
 
-itayk@cyberhat.co.il
-
 # Usage
 
 # Output
