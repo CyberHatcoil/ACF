@@ -1,25 +1,25 @@
+import json
 import requests
-from flask import json
-
 from metadata import MetadataPlugin
 
 
-class IP_Rep(MetadataPlugin):
+class IpInfoPlugin(MetadataPlugin):
     def __init__(self):
         MetadataPlugin.__init__(self)
+        self.name = "IpInfo"
+        self._url = 'https://dazzlepod.com/ip/%s.json'
 
-    def run(self, ip):
-        ip_info = self.get_ip_info(ip)
+    def run(self):
+        ip_info = self.get_ip_info(self._dst_ip)
         res = []
         for k,v in ip_info.iteritems():
-            res.append("%s: %s" % (k,v))
+            if len(v):
+                res.append("%s: %s" % (k,v))
         return ",".join(res)
-
 
     def get_ip_info(self, ip):
         try:
-            url = 'https://dazzlepod.com/ip/%s.json' % ip
-            response = json.loads(requests.get(url).text)
+            response = json.loads(requests.get(self._url % ip).text)
             for k in response.keys():
                 response[k] = unicode(response[k])
             return response

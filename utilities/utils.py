@@ -3,30 +3,26 @@ import os
 import socket
 import struct
 
-import requests
-from flask import json
-
-ABS_PATH = os.path.dirname(os.path.abspath(__file__))
 PROTOCOLS = {6: "tcp",
              17: "udp"}
 STATES = {1: "established",
-          2: "tcp_syn_sent",
-          3: "tcp_syn_recv",
-          4: "tcp_fin_wait1",
-          5: "tcp_fin_wait2",
+          2: "syn_sent",
+          3: "syn_recv",
+          4: "fin_wait1",
+          5: "fin_wait2",
           6: "time_wait",
-          7: "tcp_close",
-          8: "tcp_close_wait",
-          9: "tcp_last_ack",
-          10: "tcp_listen",
-          11: "tcp_closing",
-          12: "tcp_new_syn_recv"
+          7: "close",
+          8: "close_wait",
+          9: "last_ack",
+          10: "listen",
+          11: "closing",
+          12: "new_syn_recv"
           }
 
 
 def load_metadata_plugins():
     def import_plugins():
-        for name in os.listdir(os.path.join(ABS_PATH, 'metadata')):
+        for name in os.listdir('metadata'):
             if (name.startswith(u'_')) or (not name.endswith(u'py')):
                 continue
             name = u'metadata.%s' % name[:-3]
@@ -35,13 +31,16 @@ def load_metadata_plugins():
             for comp in components[1:]:
                 mod = getattr(mod, comp)
             yield mod
+    metadata_plugins = []
     for mod in import_plugins():
         try:
             for name, obj in inspect.getmembers(mod):
                 if inspect.isclass(obj) and obj.__name__ != "MetadataPlugin":
-                    yield obj()
+                    if obj.__name__.endswith("Plugin"):
+                        metadata_plugins.append(obj())
         except Exception, e:
             pass
+    return metadata_plugins
 
 
 def get_running_processes(adb):
@@ -89,20 +88,19 @@ def console_writer(console_writer_queue):
 def metadata_file_writer(q, filename):
     metadata_plugins = load_metadata_plugins()
     metadata_file = open(filename, "w")
-    ip_adresses = []
+    ip_adresses = [0]
     while True:
-        line = q.get()
-        ip = line[6]
-        res = []
+        connection = q.get()
+        ip = connection[6]
         if ip not in ip_adresses:
+            ip_adresses.append(ip)
             for p in metadata_plugins:
-                res.append(p.run(ip))
-            metadata_file.write("%s,%s" % (ip, ",".join(res)))
-            metadata_file.flush()
+                p.set_connection(connection)
+                res = p.run()
+                if len(res):
+                    metadata_file.write("%s, %s,%s\n" % (p.name, hex_to_ip(ip), res))
+                    metadata_file.flush()
         q.task_done()
-
-
-
 
 
 def hex_to_ip(ip):

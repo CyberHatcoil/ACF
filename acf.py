@@ -27,7 +27,7 @@ def set_up_writers(args):
     log_file_t.start()
 
     metadata_file_q = Queue.Queue()
-    metadata_file_t = threading.Thread(target=metadata_file_writer, args=(metadata_file_q, args.plugin_file))
+    metadata_file_t = threading.Thread(target=metadata_file_writer, args=(metadata_file_q, args.metadata_file))
     metadata_file_t.daemon = True
     metadata_file_t.start()
 
@@ -63,9 +63,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Acm - Android Connections Monitor')
     parser.add_argument('-d', action="store", dest="device_id",
                         help="Target device serial number or ip:port address [REQUIRED]")
-    parser.add_argument('-o', action="store", dest="log_file", default="acm-log.log",
+    parser.add_argument('-o', action="store", dest="log_file", default="acm-log.csv",
                         help="Output filename. Default: acm-log.log")
-    parser.add_argument('-p', action="store", dest="metadata_file", default="metadata.log",
+    parser.add_argument('-p', action="store", dest="metadata_file", default="metadata.csv",
                         help="Output filename. Default: acm-log.log")
     parser.add_argument('-t', action="store", dest="threads", default=20, type=int,
                         help="Number of threads to use for monitoring. Default: 20")

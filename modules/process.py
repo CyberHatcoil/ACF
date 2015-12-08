@@ -21,7 +21,7 @@ class Process(object):
             output = (int(time()), self.name, self.pid, protocol, src_ip, src_port, dst_ip, dst_port, state)
             self._console_writer.put(output)
             self._log_file_writer.put(output)
-            self._metadata_file_writer(output)
+            self._metadata_file_writer.put(output)
 
     def updateUdp(self, udp_conns):
         conns = []
