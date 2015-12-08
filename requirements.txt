@@ -1,1 +1,2 @@
 ipwhois==0.11.0
+netaddr==0.7.15

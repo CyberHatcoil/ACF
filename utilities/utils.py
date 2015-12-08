@@ -3,6 +3,9 @@ import os
 import socket
 import struct
 
+from datetime import datetime
+from netaddr import IPAddress
+
 PROTOCOLS = {6: "tcp",
              17: "udp"}
 STATES = {1: "established",
@@ -63,7 +66,7 @@ def log_file_writer(loq_queue, filename):
     log_file = open(filename, "w")
     while True:
         line = list(loq_queue.get())
-
+        line[0] = datetime.fromtimestamp(line[0])
         line[3] = PROTOCOLS[line[3]]
         line[4] = hex_to_ip(line[4])
         line[6] = hex_to_ip(line[6])
@@ -92,7 +95,7 @@ def metadata_file_writer(q, filename):
     while True:
         connection = q.get()
         ip = connection[6]
-        if ip not in ip_adresses:
+        if ip not in ip_adresses and not IPAddress(hex_to_ip(ip)).is_private():
             ip_adresses.append(ip)
             for p in metadata_plugins:
                 p.set_connection(connection)

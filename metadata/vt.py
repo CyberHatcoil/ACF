@@ -8,14 +8,14 @@ class VirusTotalPlugin(MetadataPlugin):
     def __init__(self):
         MetadataPlugin.__init__(self)
         self.name = "VirusTotal"
-        self._api_key = ""
+        self._api_key = "d1e7d00a14cc5c8a4fcfde16c8aef753c2de14f3328a5fd907c71522a17fc15e"
         self._api_url = 'https://www.virustotal.com/vtapi/v2/'
-
 
     def run(self):
         if self._api_key == "":
             return ""
-        return ""
+
+        return self._scan_ip()
 
     def _scan_ip(self):
         request_url = self._api_url + 'ip-address/report?'
@@ -32,12 +32,3 @@ class VirusTotalPlugin(MetadataPlugin):
                 return json_response
         except Exception, e:
             return ""
-
-
-
-conn = ("AC10010C",
-        "172.16.1.12",
-        "1234",
-        "08080808",
-        "80",
-        "tcp")

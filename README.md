@@ -6,8 +6,26 @@ This software enables a forensic investigator to map each connection to its orig
 
 It doesn't require root privliges on the system, but do require adb & USB debugging.
 
-# Contact Us
+# Installation
+
+    pip install -r requirments.txt
 
 # Usage
 
+Make sure you device is connected, usb debugging is enabled and authorized.
+    adb devices
+
+To run Acf:
+    python acf.py -d [Device serial number]
+
 # Output
+Acf create 3 different output types:
+1. console output - live connections
+2. acm-log file - live connections
+3. metadata file - external IP's metadata results
+
+acm-log example:
+<img src="http://i.imgur.com/CkRp6LV.png" />
+# Contact Us
+
+Itayk@CyberHat.co.il

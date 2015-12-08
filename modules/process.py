@@ -15,6 +15,8 @@ class Process(object):
     def _manage_connections(self, connections, protocol):
         for src_ip, src_port, dst_ip, dst_port, state in connections:
             conn = (src_ip, src_port, dst_ip, dst_port, state)
+            if conn[2] == 0:
+                continue
             if conn in self._connections_history:
                 continue
             self._connections_history.append(conn)
