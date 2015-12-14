@@ -9,9 +9,12 @@ class AndroidDebuggingBridge(object):
         self.connected_devices()
 
     def execute(self, cmd):
-        (stdout, stderr) = Popen("adb -s %s %s" % (self.device, cmd), shell=True, stdout=PIPE).communicate()
+        (stdout, stderr) = Popen('adb -s %s %s' % (self.device, cmd), shell=True, stdout=PIPE).communicate()
         self.output = stdout
         self.error = stderr
+
+    def shell(self):
+        pass
 
     def kill_server(self):
         self.execute("kill-server")

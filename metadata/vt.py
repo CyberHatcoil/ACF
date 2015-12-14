@@ -1,7 +1,6 @@
 import json
 import urllib
 from metadata import MetadataPlugin
-from utilities.utils import hex_to_ip
 
 
 class VirusTotalPlugin(MetadataPlugin):
@@ -12,10 +11,14 @@ class VirusTotalPlugin(MetadataPlugin):
         self._api_url = 'https://www.virustotal.com/vtapi/v2/'
 
     def run(self):
+        res = []
         if self._api_key == "":
             return ""
-
-        return self._scan_ip()
+        vt = self._scan_ip()
+        for k,v in vt.iteritems():
+            if len(v):
+                res.append("%s: %s" % (k,v))
+        return ", ".join(res)
 
     def _scan_ip(self):
         request_url = self._api_url + 'ip-address/report?'
