@@ -60,7 +60,7 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Acm - Android Connections Monitor')
+    parser = argparse.ArgumentParser(description='Acf - Android Connections Forensics')
     parser.add_argument('-d', action="store", dest="device_id",
                         help="Target device serial number or ip:port address [REQUIRED]")
     parser.add_argument('-o', action="store", dest="log_file", default="acm-log.csv",
