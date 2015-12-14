@@ -13,8 +13,12 @@ class AndroidDebuggingBridge(object):
         self.output = stdout
         self.error = stderr
 
-    def shell(self):
-        pass
+    @staticmethod
+    def shell(cmd, device):
+        (stdout, stderr) = Popen('adb -s %s %s' % (device, cmd), shell=True, stdout=PIPE).communicate()
+        output = stdout
+        error = stderr
+        return stdout
 
     def kill_server(self):
         self.execute("kill-server")

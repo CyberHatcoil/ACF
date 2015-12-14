@@ -15,10 +15,12 @@ class VirusTotalPlugin(MetadataPlugin):
         if self._api_key == "":
             return ""
         vt = self._scan_ip()
-        for k,v in vt.iteritems():
-            if len(v):
-                res.append("%s: %s" % (k,v))
-        return ", ".join(res)
+        if len(vt):
+            for k,v in vt.iteritems():
+                if len(v):
+                    res.append("%s: %s" % (k,v))
+            return ", ".join(res)
+        return ""
 
     def _scan_ip(self):
         request_url = self._api_url + 'ip-address/report?'
