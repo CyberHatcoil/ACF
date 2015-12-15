@@ -1,7 +1,7 @@
 """
 Android Connections Forensics (ACF)
 
-Copyright (c) 2015-2016, Itay Kruk, CyberHat LTD
+Copyright (c) 2015, Itay Kruk, CyberHat LTD
 All rights reserved.
 
 """
@@ -38,7 +38,9 @@ def main(args):
     processes = []
     try:
         console_writer_q, log_file_q, metadata_file_q = set_up_writers(args)
-
+        print "[!] Set up plugins. it may take a few seconds .."
+        sleep(2.5
+        )
         acm = Acf(device_id=args.device_id, threads_num=args.threads)
         acm.setDaemon(True)
         acm.start()
@@ -46,7 +48,7 @@ def main(args):
         adb = AndroidDebuggingBridge(args.device_id)
 
         while True:
-            running_processes = get_running_processes(adb)
+            running_processes = get_running_processes(adb, args.package_filter)
             for process in running_processes:
                 if process not in processes:
                     p = Process(process, console_writer_q, log_file_q, metadata_file_q)
@@ -60,9 +62,11 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Acm - Android Connections Monitor')
+    parser = argparse.ArgumentParser(description='Acf - Android Connections Forensics')
     parser.add_argument('-d', action="store", dest="device_id",
                         help="Target device serial number or ip:port address [REQUIRED]")
+    parser.add_argument('-f', action="store", dest="package_filter",
+                        help="Filter the connections by package names contains specific string.", type=str, default=None)
     parser.add_argument('-o', action="store", dest="log_file", default="acm-log.csv",
                         help="Output filename. Default: acm-log.log")
     parser.add_argument('-p', action="store", dest="metadata_file", default="metadata.csv",

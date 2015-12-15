@@ -12,7 +12,7 @@ class IpInfoPlugin(MetadataPlugin):
     def run(self):
         ip_info = self.get_ip_info(self._dst_ip)
         res = []
-        for k,v in ip_info.iteritems():
+        for k, v in ip_info.iteritems():
             if len(v):
                 res.append("%s: %s" % (k,v))
         return ",".join(res)

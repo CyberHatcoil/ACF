@@ -6,8 +6,11 @@ import struct
 from datetime import datetime
 from netaddr import IPAddress
 
-PROTOCOLS = {6: "tcp",
-             17: "udp"}
+PROTOCOLS = {1: "icmp",
+             6: "tcp",
+             17: "udp",
+             99: "raw",
+             }
 STATES = {1: "established",
           2: "syn_sent",
           3: "syn_recv",
@@ -46,18 +49,30 @@ def load_metadata_plugins():
     return metadata_plugins
 
 
-def get_running_processes(adb):
+def get_running_processes(adb, package_filter):
     try:
         ps = adb.get_processes()
-        for process in ps:
-            pDict = {}
-            cols = process.split()
-            pDict.update({
-                "user": cols[0],
-                "pid": cols[1],
-                "name": cols[-1]
-            })
-            yield pDict
+        if package_filter is not None:
+            for process in ps:
+                pDict = {}
+                cols = process.split()
+                if package_filter in cols[-1]:
+                    pDict.update({
+                        "user": cols[0],
+                        "pid": cols[1],
+                        "name": cols[-1]
+                    })
+                    yield pDict
+        else:
+            for process in ps:
+                pDict = {}
+                cols = process.split()
+                pDict.update({
+                    "user": cols[0],
+                    "pid": cols[1],
+                    "name": cols[-1]
+                })
+                yield pDict
     except Exception, e:
         print "[!] Cannot retrieve running processes. Exception: %s" % e.message
 
@@ -89,15 +104,16 @@ def console_writer(console_writer_queue):
 
 
 def metadata_file_writer(q, filename):
-    metadata_plugins = load_metadata_plugins()
+    PLUGINS = load_metadata_plugins()
     metadata_file = open(filename, "w")
     ip_adresses = [0]
     while True:
         connection = q.get()
         ip = connection[6]
-        if ip not in ip_adresses and not IPAddress(hex_to_ip(ip)).is_private():
+        ipAddress = IPAddress(hex_to_ip(ip))
+        if ip not in ip_adresses and not ipAddress.is_private() and not ipAddress.is_loopback():
             ip_adresses.append(ip)
-            for p in metadata_plugins:
+            for p in PLUGINS:
                 p.set_connection(connection)
                 res = p.run()
                 if len(res):
