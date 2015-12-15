@@ -1,5 +1,4 @@
 from ipwhois import IPWhois
-from ipwhois.exceptions import IPDefinedError
 from metadata import MetadataPlugin
 
 
