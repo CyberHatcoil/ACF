@@ -31,8 +31,9 @@ Filter by process name match:
 
 Filter by process owner:
 
-    python acf.py -d [Device serial number] -f user
-    python acf.py -d [Device serial number] -f system
+    python acf.py -d [Device serial number] -u user
+    python acf.py -d [Device serial number] -u system
+    python acf.py -d [Device serial number] -u root
 
 # Output
 ACF create 3 different output types:
