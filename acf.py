@@ -39,8 +39,7 @@ def main(args):
     try:
         console_writer_q, log_file_q, metadata_file_q = set_up_writers(args)
         print "[!] Set up plugins. it may take a few seconds .."
-        sleep(2.5
-        )
+        sleep(2.5)
         acm = Acf(device_id=args.device_id, threads_num=args.threads)
         acm.setDaemon(True)
         acm.start()
