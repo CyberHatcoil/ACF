@@ -28,7 +28,6 @@ class Acf(threading.Thread):
 
     def _acm_worker(self):
         while True:
-            #todo: adb instance for each worker
             process = self._processes_queue.get()
             output = AndroidDebuggingBridge.shell(self._command.format(pid=process.pid), self._device_id)
             if DIRECTORY_NOT_FOUND in output:

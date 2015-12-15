@@ -48,7 +48,7 @@ def main(args):
         adb = AndroidDebuggingBridge(args.device_id)
 
         while True:
-            running_processes = get_running_processes(adb, args.package_filter)
+            running_processes = get_running_processes(adb, args.package_filter, args.user_filter)
             for process in running_processes:
                 if process not in processes:
                     p = Process(process, console_writer_q, log_file_q, metadata_file_q)
@@ -67,6 +67,8 @@ if __name__ == "__main__":
                         help="Target device serial number or ip:port address [REQUIRED]")
     parser.add_argument('-f', action="store", dest="package_filter",
                         help="Filter the connections by package names contains specific string.", type=str, default=None)
+    parser.add_argument('-u', action="store", dest="user_filter",
+                        help="Filter the connections by process owner.", choices=["user", "system"], type=str, default=None)
     parser.add_argument('-o', action="store", dest="log_file", default="acm-log.csv",
                         help="Output filename. Default: acm-log.log")
     parser.add_argument('-p', action="store", dest="metadata_file", default="metadata.csv",
@@ -77,4 +79,6 @@ if __name__ == "__main__":
     if options.device_id is None:
         parser.print_help()
         exit(0)
+    if (options.package_filter is not None) and (options.user_filter is not None):
+        print "[!] Please use only one filter method."
     main(options)

@@ -17,5 +17,5 @@ class WhoIsPlugin(MetadataPlugin):
                 if not v is None:
                     res.append("%s: %s" % (k,v))
             return ",".join(res)
-        except IPDefinedError:
+        except Exception, e:
              return ""

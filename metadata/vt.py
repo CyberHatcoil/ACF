@@ -17,7 +17,7 @@ class VirusTotalPlugin(MetadataPlugin):
         vt = self._scan_ip()
         if len(vt):
             for k,v in vt.iteritems():
-                if len(v):
+                if v:
                     res.append("%s: %s" % (k,v))
             return ", ".join(res)
         return ""

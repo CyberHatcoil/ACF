@@ -49,7 +49,7 @@ def load_metadata_plugins():
     return metadata_plugins
 
 
-def get_running_processes(adb, package_filter):
+def get_running_processes(adb, package_filter, user_filter):
     try:
         ps = adb.get_processes()
         if package_filter is not None:
@@ -63,6 +63,20 @@ def get_running_processes(adb, package_filter):
                         "name": cols[-1]
                     })
                     yield pDict
+            return
+
+        elif user_filter is not None:
+            for process in ps:
+                pDict = {}
+                cols = process.split()
+                if cols[0].startswith(user_filter[0]):
+                    pDict.update({
+                        "user": cols[0],
+                        "pid": cols[1],
+                        "name": cols[-1]
+                    })
+                    yield pDict
+
         else:
             for process in ps:
                 pDict = {}
