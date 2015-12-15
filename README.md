@@ -25,6 +25,15 @@ To run Acf:
 
     python acf.py -d [Device serial number]
 
+Filter by process name match:
+
+    python acf.py -d [Device serial number] -f facebook
+
+Filter by process owner:
+
+    python acf.py -d [Device serial number] -f user
+    python acf.py -d [Device serial number] -f system
+
 # Output
 ACF create 3 different output types:
 
@@ -33,6 +42,19 @@ ACF create 3 different output types:
 2. acm-log file - live connections
 
 3. metadata file - external IP's metadata results
+
+#Metadata Plugins
+Acf extract metadata to every external IP address.
+
+Current Plugins:
+
+1. IP Info - geolocation, provider etc..
+
+2. IP Rep - alienvault ip blacklist database.
+
+3. VirusTotal - virustotal ip lookup.
+
+4. Whois
 
 
 acm-log example:
