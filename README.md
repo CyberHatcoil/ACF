@@ -43,6 +43,9 @@ ACF create 3 different output types:
 
 3. metadata file - external IP's metadata results
 
+acm-log example:
+<img src="http://i.imgur.com/CkRp6LV.png" />
+
 #Metadata Plugins
 Acf extract metadata to every external IP address.
 
@@ -56,9 +59,6 @@ Current Plugins:
 
 4. Whois
 
-
-acm-log example:
-<img src="http://i.imgur.com/CkRp6LV.png" />
 # Contact Us
 
 Itayk [ [ AT ] ]CyberHat.co.il
