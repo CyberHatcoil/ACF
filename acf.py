@@ -67,7 +67,7 @@ if __name__ == "__main__":
     parser.add_argument('-f', action="store", dest="package_filter",
                         help="Filter the connections by package names contains specific string.", type=str, default=None)
     parser.add_argument('-u', action="store", dest="user_filter",
-                        help="Filter the connections by process owner.", choices=["user", "system"], type=str, default=None)
+                        help="Filter the connections by process owner.", choices=["user", "system", "root"], type=str, default=None)
     parser.add_argument('-o', action="store", dest="log_file", default="acm-log.csv",
                         help="Output filename. Default: acm-log.log")
     parser.add_argument('-p', action="store", dest="metadata_file", default="metadata.csv",
